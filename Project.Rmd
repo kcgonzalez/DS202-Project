@@ -59,7 +59,7 @@ Final <- Data %>%
 
 # Total Deaths by Region
 Which of the five regions has the highest death in covid 19?
-  -   BK has the highest total deaths within the timeframe of when this data was taken with death count of 12107.
+  -   BK has the highest total deaths within the time frame of when this data was taken with a death count of 12107.
 ```{r}
 # sum of death count in by region
 RegionsTotalDeaths <- Final %>% 
@@ -71,16 +71,16 @@ RegionsTotalDeaths <- Final %>%
 RegionsTotalDeaths
 
 # bar graph displaying death count in by region
-bar <- barplot((c(RegionsTotalDeaths$SI_DEATH,
-          RegionsTotalDeaths$QN_DEATH, 
-          RegionsTotalDeaths$MN_DEATH, 
-          RegionsTotalDeaths$BK_DEATH, 
-          RegionsTotalDeaths$BX_DEATH)), 
+barplot(c(RegionsTotalDeaths$BK_DEATH,
+           RegionsTotalDeaths$QN_DEATH,
+           RegionsTotalDeaths$BX_DEATH,
+           RegionsTotalDeaths$MN_DEATH,
+           RegionsTotalDeaths$SI_DEATH), 
         main = "Total Deaths in each Region", 
         xlab = "Region",
         ylim = c(0, max(RegionsTotalDeaths) + 1),
         ylab = "Death Count",
-        names.arg = c("SI", "QN", "MN", "BK", "BX"),
+        names.arg = c("BK", "QN", "BX", "MN", "SI"),
         col = "coral",
         las = 1)
 ```
