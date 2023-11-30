@@ -62,7 +62,17 @@ RegionsTotalDeaths <- Final %>%
             MN_DEATH = sum(MN_DEATH_COUNT),
             BK_DEATH = sum(BK_DEATH_COUNT),
             BX_DEATH = sum(BX_DEATH_COUNT))
-                              
+
+barplot((c(RegionsTotalDeaths$SI_DEATH,
+          RegionsTotalDeaths$QN_DEATH, 
+          RegionsTotalDeaths$MN_DEATH, 
+          RegionsTotalDeaths$BK_DEATH, 
+          RegionsTotalDeaths$BX_DEATH)), 
+        main = "Total Deaths in each Region", 
+        xlab = "Death Count",
+        ylab = "Region",
+        names.arg = c("SI", "QN", "MN", "BK", "BX"),
+        col = "pink")                           
 
 Final2 <- Final %>%
   mutate(
