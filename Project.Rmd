@@ -31,7 +31,6 @@ Which month in each year had the most cases in NYC? Most deaths?
 Visualization of NYC COVID-19 cases and deaths breakdown by year and then month in each year
 What is the average number of deaths and COVID-19 cases on a yearly, monthly, weekly basis in NYC?
 
-
 # Marginal summaries:
 
 ```{r}
