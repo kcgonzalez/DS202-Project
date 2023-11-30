@@ -55,6 +55,8 @@ Final <- Data %>%
 
 ```
 
+# Total Deaths by Region
+
 ```{r}
 RegionsTotalDeaths <- Final %>% 
   summarize(SI_DEATH = sum(SI_DEATH_COUNT),
@@ -72,8 +74,10 @@ barplot((c(RegionsTotalDeaths$SI_DEATH,
         xlab = "Region",
         ylab = "Death Count",
         names.arg = c("SI", "QN", "MN", "BK", "BX"),
-        col = "coral")                           
+        col = "coral")  
+```
 
+```{r}
 Final2 <- Final %>%
   mutate(
     Year = year(date_of_interest),
