@@ -69,8 +69,8 @@ barplot((c(RegionsTotalDeaths$SI_DEATH,
           RegionsTotalDeaths$BK_DEATH, 
           RegionsTotalDeaths$BX_DEATH)), 
         main = "Total Deaths in each Region", 
-        ylab = "Death Count",
         xlab = "Region",
+        ylab = "Death Count",
         names.arg = c("SI", "QN", "MN", "BK", "BX"),
         col = "coral")                           
 
