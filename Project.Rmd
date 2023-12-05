@@ -245,9 +245,3 @@ Data1=Data[order(-Data$CASE_COUNT),]
 max(Data1$CASE_COUNT)
 Data1=Data[!duplicated(Data$date_of_interest),]
 ```
-
-##Which month in each year had the most cases in NYC? Most deaths?
-
-```{r}
-Data_202
-```
