@@ -237,3 +237,17 @@ ggplot(Deaths_and_cases_each_month, aes(x = factor(Month), y=Avg_Deaths)) +
 
 
 ```
+
+## On which day has the most COVID-19 cases?
+
+```{r}
+Data1=Data[order(-Data$CASE_COUNT),]
+max(Data1$CASE_COUNT)
+Data1=Data[!duplicated(Data$date_of_interest),]
+```
+
+##Which month in each year had the most cases in NYC? Most deaths?
+
+```{r}
+Data_202
+```
