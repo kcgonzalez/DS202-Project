@@ -36,7 +36,7 @@ We will give numeric values showing which month in each year has the most cases 
 -   What is the average number of deaths and COVID-19 cases on a yearly, monthly basis in NYC?
 We will calculate the average number of deaths and cases for each year and each month and see if there are any increases or decreases due to the vaccines.
 
--   Visualization of NYC COVID-19 cases and deaths breakdown by year and then month in each year
+-   Visualization of NYC COVID-19 cases and deaths breakdown by year, month, day, and weekday.
 We will create plots to easily compare which month and year has the highest or lowest cases and deaths.
 
 # Description of your data set: 
@@ -81,6 +81,9 @@ New <- Final2 %>%
   ) %>% 
   group_by(weekdays) 
 ```
+
+# Methods
+We mostly used the tydiverse package for our data exploration to get our results. For example, we used lubridate to change the format of the date, we also used ggplot2 to do our visualization for our research questions.
 
 # Total Deaths by Region
 Which of the five regions has the highest death in covid 19?
@@ -273,3 +276,5 @@ ggplot(Data2, aes(reorder(date_of_interest, -CASE_COUNT), CASE_COUNT)) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
+#Conclusion:
+From the graphs we can see that normally there are more cases towards the beginning and end of the year, which might be cased by several factors such as national holidays or family reunion. Overall we noticed that the amount of total deaths started to decrease over time, which might be due to people being more careful such as quarantine and getting the shot. As for total cases, they started to increase, which might be due to more and more people getting tested.
