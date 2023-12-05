@@ -197,8 +197,6 @@ ggplot(New, aes(x=factor(weekdays), y = CASE_COUNT)) +
 
 ```
 
-
-
 # Graphical Display of average deaths and cases of COVID-19 per year
 
 ```{r}
