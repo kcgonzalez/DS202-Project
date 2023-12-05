@@ -21,8 +21,8 @@ COVID-19 Daily Counts of Cases
 # url:
 <https://data.cityofnewyork.us/api/views/rc75-m7u3/rows.csv?accessType=DOWNLOAD>
 
-#introduction and research questions:
-Covid-19 has been a global health crisis since late 2019, and here we would like to focus on covid-19 cases and deaths in New York City(including 5 regions). We will address several questions and give a conclusion of what causes the increase in cases and deaths.
+# Introduction and Research Questions:
+Covid-19 has been a global health crisis since late 2019, and here we would like to focus on covid-19 cases and deaths in the five regions in New York City. We will address several questions and give a conclusion of what causes the increase in cases and deaths.
 
 -   Which of the five regions has the highest death in covid-19?
 We will analyze which of the five regions has the highest death in covid-19 and maybe give assumption or inference of why this region has the highest death.
@@ -41,8 +41,6 @@ We will create plots to easily compare which month and year has the highest or l
 
 # Description of your data set: 
 This data set counts the daily number of New York City residents who tested positive for COVID-19, were hospitalized with COVID-19, and the number of deaths among COVID-19 patients. This data set includes 67 variables and 1158 observations. These observations are recorded from 2/29/2020 to 5/1/2023. All of the variables are integer values. For the first few columns, it counts the daily number of cases and deaths in New York City, then counts the average seven days of those records. After that, it broke down into five different regions, which are Brooklyn (BK), Bronx (BX), Manhattan (MN), Queens (QU), and Staten Island (SI). Each region also counts the total cases and deaths and the average seven days of those cases.
-
-
 
 
 ```{r packages, message=FALSE}
@@ -245,7 +243,6 @@ ggplot(Deaths_and_cases_each_month, aes(x = factor(Month), y=Avg_Deaths)) +
   facet_wrap(~Year) 
 ```
 
-<<<<<<< HEAD
 ## On which day has the most COVID-19 cases?
 
 ```{r}
@@ -253,6 +250,4 @@ Data1=Data[order(-Data$CASE_COUNT),]
 max(Data1$CASE_COUNT)
 Data1=Data[!duplicated(Data$date_of_interest),]
 ```
-=======
-#Results:
->>>>>>> c3807a524584a2dc945b5277f218cedd68931a89
+
