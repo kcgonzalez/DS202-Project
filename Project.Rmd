@@ -51,7 +51,6 @@ library(tidyverse)
 
 ```{r}
 Data <- read.csv("COVID.csv")
-read
 head(Data)
 dim(Data) # 1158 observations and 67 variables
 str(Data) # All integer variables with data being the only character variable 
@@ -244,7 +243,7 @@ Deaths_and_cases_each_month <- Final2 %>% group_by (Year,Month) %>% summarize(Av
 
 ggplot(Deaths_and_cases_each_month, aes(x = factor(Month), y=Avg_Deaths)) +
   geom_bar(stat = "identity", fill = "purple", alpha = 0.8) +
-  labs(title = "Average Deaths Per Month for each year",
+  labs(title = "Average Deaths per Month for Each Year",
        x = "Month",
        y = "Deaths") +
   facet_wrap(~Year) 
@@ -261,6 +260,16 @@ ggplot(Deaths_and_cases_each_month, aes(x = factor(Month), y=Avg_Deaths)) +
 ```{r}
 Data1=Data[order(-Data$CASE_COUNT),]
 max(Data1$CASE_COUNT)
-Data1=Data[!duplicated(Data$date_of_interest),]
+Data1
+
+Data2 = Data1[Data1$CASE_COUNT>31700,]
+
+ggplot(Data2, aes(reorder(date_of_interest, -CASE_COUNT), CASE_COUNT)) + 
+  geom_bar(stat = "identity", fill = "purple", alpha = 0.8) +
+  scale_y_continuous(breaks = seq(0, max(Data2$CASE_COUNT), by = 10000)) +
+    labs(title = "Top 10 Days with Most Covid Cases",
+       x = "Date",
+       y = "Case Count") +
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
