@@ -31,12 +31,12 @@ This data set counts the daily number of New York City residents who tested posi
   -   Visualization of NYC COVID-19 cases and deaths breakdown by year and then month in each year
   -   What is the average number of deaths and COVID-19 cases on a yearly, monthly, weekly basis in NYC?
 
-# Marginal summaries:
 
 ```{r packages, message=FALSE}
 library(readr)
 library(tidyverse)
 ```
+# Marginal summaries And Cleaning:
 
 ```{r}
 Data <- read.csv("COVID.csv")
@@ -48,12 +48,29 @@ str(Data) # All integer variables with data being the only character variable
 missing_values <- colSums(is.na(Data))
 missing_values #no missing values 
 
+
+Final2 %>% summarise(TotalDeaths = sum(DEATH_COUNT), TotalCases = sum(CASE_COUNT))
+
+
 Data$date_of_interest <- lubridate::mdy(Data$date_of_interest)
 
 
 summary(Data)
 Final <- Data %>%
   select(-contains("7DAY_AVG"))
+
+Final2 <- Final %>%
+  mutate(
+    Year = year(date_of_interest),
+    Month = month(date_of_interest, label = TRUE),
+    Day = day(date_of_interest)
+  )
+
+New <- Final2 %>% 
+  mutate(
+    weekdays = wday(date_of_interest, label = TRUE)
+  ) %>% 
+  group_by(weekdays) 
 
 ```
 
@@ -84,44 +101,107 @@ barplot(c(RegionsTotalDeaths$BK_DEATH,
         col = "coral",
         las = 1)
 ```
+# Graphical Display of deaths and cases of COVID-19 per year
 
 ```{r}
-Final2 <- Final %>%
-  mutate(
-    Year = year(date_of_interest),
-    Month = month(date_of_interest, label = TRUE),
-    Day = day(date_of_interest)
-  )
-
-CasesTotal <- Final2 %>% group_by (Month, Year) %>% summarize(TotalCases = sum(CASE_COUNT)) %>% 
-  group_by(Year) %>% 
-  slice(which.max(TotalCases))
-                                                         
-DeathsTotal <- Final2 %>% group_by (Month, Year) %>% summarize(TotalDeaths = sum(DEATH_COUNT))  %>% 
-  group_by(Year) %>% 
-  slice(which.max(TotalDeaths))  
-
-
 ggplot(Final2, aes(x = factor(Year), y=DEATH_COUNT)) +
   geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
-  labs(title = "Deaths Per Yaer",
+  labs(title = "Deaths Per Year",
        x = "Year",
-       y = "Deaths")
+       y = "Deaths") + 
+  theme(plot.title = element_text(hjust = 0.5))
 
+ggplot(Final2, aes(x = factor(Year), y=CASE_COUNT)) +
+  geom_bar(stat = "identity", fill = "purple", alpha = 0.7) +
+  labs(title = "Cases Per Year",
+       x = "Year",
+       y = "Cases") + 
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+# Graphical Display of deaths and cases of COVID-19 per month
+  
+```{r}
 ggplot(Final2, aes(x = factor(Month), y=DEATH_COUNT)) +
   geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
   labs(title = "Deaths Per Month",
        x = "Month",
-       y = "Deaths")
+       y = "Deaths")+ 
+  theme(plot.title = element_text(hjust = 0.5))
 
+ggplot(Final2, aes(x = factor(Month), y=CASE_COUNT)) +
+  geom_bar(stat = "identity", fill = "purple", alpha = 0.7) +
+  labs(title = "Cases Per Month",
+       x = "Month",
+       y = "Cases")+ 
+  theme(plot.title = element_text(hjust = 0.5))
+  
+```
+
+# Graphical Display of deaths and cases of COVID-19 per Month and Year
+
+```{r}
+# Cases per year 
 ggplot(Final2, aes(x = factor(Month), y = DEATH_COUNT)) +
   geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
-  labs(title = "Deaths Per Month",
+  labs(title = "Deaths Per Month and Year",
        x = "Month",
        y = "Deaths") +
-  facet_grid(~Year, scales = "free_x", space = "free_x")
+  facet_grid(~Year, scales = "free_x", space = "free_x") + 
+  theme(plot.title = element_text(hjust = 0.5))
 
-  
+ggplot(Final2, aes(x = factor(Month), y = CASE_COUNT)) +
+  geom_bar(stat = "identity", fill = "purple", alpha = 0.7) +
+  labs(title = "Cases Per Month and Year",
+       x = "Month",
+       y = "Cases") +
+  facet_grid(~Year, scales = "free_x", space = "free_x") + 
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+# Graphical Display of deaths and cases of COVID-19 per day
+
+```{r}
+ggplot(Final2, aes(x = factor(Day), y = CASE_COUNT)) +
+  geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
+  labs(title = "Cases per Day",
+       x = "Day",
+       y = "Cases") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(Final2, aes(x = factor(Day), y = DEATH_COUNT)) +
+  geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
+  labs(title = "Deaths Per Day",
+       x = "Day",
+       y = "Deaths") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+# Graphical Display of deaths and cases of COVID-19 per weekday
+
+```{r}
+ggplot(New, aes(x=factor(weekdays), y = DEATH_COUNT)) +
+  geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
+  labs(title = "Deaths Per Day",
+       x = "Weekday",
+       y = "Deaths") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(New, aes(x=factor(weekdays), y = CASE_COUNT)) +
+  geom_bar(stat = "identity", fill = "purple", alpha = 0.7) +
+  labs(title = "Cases Per Day",
+       x = "Weekday",
+       y = "Cases") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+
+
+```
+
+```{r}
 Final2$Year <- factor(Final2$Year, levels = c(2020, 2021, 2022, 2023))
 
 
@@ -155,4 +235,6 @@ ggplot(Deaths_and_cases_each_month, aes(x = factor(Month), y=Avg_Cases)) +
        x = "Month",
        y = "Cases") +
   facet_wrap(~Year) 
+
+
 ```
