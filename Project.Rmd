@@ -109,6 +109,15 @@ barplot(c(RegionsTotalDeaths$BK_DEATH,
         names.arg = c("BK", "QN", "BX", "MN", "SI"),
         col = "coral",
         las = 1)
+
+
+CasesTotal <- Final2 %>% group_by (Month, Year) %>% summarize(TotalCases = sum(CASE_COUNT)) %>% 
+  group_by(Year) %>% 
+  slice(which.max(TotalCases))
+                                                         
+DeathsTotal <- Final2 %>% group_by (Month, Year) %>% summarize(TotalDeaths = sum(DEATH_COUNT))  %>% 
+  group_by(Year) %>% 
+  slice(which.max(TotalDeaths))  
 ```
 
 # Graphical Display of deaths and cases of COVID-19 per year
