@@ -84,7 +84,6 @@ New <- Final2 %>%
     weekdays = wday(date_of_interest, label = TRUE)
   ) %>% 
   group_by(weekdays) 
-
 ```
 
 # Total Deaths by Region
@@ -131,7 +130,6 @@ ggplot(Final2, aes(x = factor(Year), y=CASE_COUNT)) +
        x = "Year",
        y = "Cases") + 
   theme(plot.title = element_text(hjust = 0.5))
-
 ```
 
 # Graphical Display of deaths and cases of COVID-19 per month
@@ -150,7 +148,6 @@ ggplot(Final2, aes(x = factor(Month), y=CASE_COUNT)) +
        x = "Month",
        y = "Cases")+ 
   theme(plot.title = element_text(hjust = 0.5))
-  
 ```
 
 # Graphical Display of deaths and cases of COVID-19 per Month and Year
@@ -208,7 +205,6 @@ ggplot(New, aes(x=factor(weekdays), y = CASE_COUNT)) +
        x = "Weekday",
        y = "Cases") +
   theme(plot.title = element_text(hjust = 0.5))
-
 ```
 
 # Graphical Display of average deaths and cases of COVID-19 per year
@@ -248,6 +244,6 @@ ggplot(Deaths_and_cases_each_month, aes(x = factor(Month), y=Avg_Deaths)) +
        x = "Month",
        y = "Cases") +
   facet_wrap(~Year) 
-
-
 ```
+
+#Results:
