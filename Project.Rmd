@@ -21,15 +21,28 @@ COVID-19 Daily Counts of Cases
 # url:
 <https://data.cityofnewyork.us/api/views/rc75-m7u3/rows.csv?accessType=DOWNLOAD>
 
+#introduction and research questions:
+Covid-19 has been a global health crisis since late 2019, and here we would like to focus on covid-19 cases and deaths in New York City(including 5 regions). We will address several questions and give a conclusion of what causes the increase in cases and deaths.
+
+-   Which of the five regions has the highest death in covid-19?
+We will analyze which of the five regions has the highest death in covid-19 and maybe give assumption or inference of why this region has the highest death.
+
+-   On which day has the most COVID-19 cases?
+We will explore and find out which day has the most covid-19 cases.
+
+-   Which month in each year had the most cases in NYC? Most deaths?
+We will give numeric values showing which month in each year has the most cases and deaths in NYC and explain why it has the most cases and deaths.
+
+-   What is the average number of deaths and COVID-19 cases on a yearly, monthly basis in NYC?
+We will calculate the average number of deaths and cases for each year and each month and see if there are any increases or decreases due to the vaccines.
+
+-   Visualization of NYC COVID-19 cases and deaths breakdown by year and then month in each year
+We will create plots to easily compare which month and year has the highest or lowest cases and deaths.
+
 # Description of your data set: 
 This data set counts the daily number of New York City residents who tested positive for COVID-19, were hospitalized with COVID-19, and the number of deaths among COVID-19 patients. This data set includes 67 variables and 1158 observations. These observations are recorded from 2/29/2020 to 5/1/2023. All of the variables are integer values. For the first few columns, it counts the daily number of cases and deaths in New York City, then counts the average seven days of those records. After that, it broke down into five different regions, which are Brooklyn (BK), Bronx (BX), Manhattan (MN), Queens (QU), and Staten Island (SI). Each region also counts the total cases and deaths and the average seven days of those cases.
 
-# Questions: 
-  -   Which of the five regions has the highest death in covid 19?
-  -   On which day has the most COVID-19 cases?
-  -   Which month in each year had the most cases in NYC? Most deaths?
-  -   Visualization of NYC COVID-19 cases and deaths breakdown by year and then month in each year
-  -   What is the average number of deaths and COVID-19 cases on a yearly, monthly, weekly basis in NYC?
+
 
 
 ```{r packages, message=FALSE}
@@ -49,9 +62,6 @@ missing_values <- colSums(is.na(Data))
 missing_values #no missing values 
 
 
-Final2 %>% summarise(TotalDeaths = sum(DEATH_COUNT), TotalCases = sum(CASE_COUNT))
-
-
 Data$date_of_interest <- lubridate::mdy(Data$date_of_interest)
 
 
@@ -66,12 +76,13 @@ Final2 <- Final %>%
     Day = day(date_of_interest)
   )
 
+Final2 %>% summarise(TotalDeaths = sum(DEATH_COUNT), TotalCases = sum(CASE_COUNT))
+
 New <- Final2 %>% 
   mutate(
     weekdays = wday(date_of_interest, label = TRUE)
   ) %>% 
   group_by(weekdays) 
-
 ```
 
 # Total Deaths by Region
@@ -101,6 +112,7 @@ barplot(c(RegionsTotalDeaths$BK_DEATH,
         col = "coral",
         las = 1)
 ```
+
 # Graphical Display of deaths and cases of COVID-19 per year
 
 ```{r}
@@ -117,7 +129,6 @@ ggplot(Final2, aes(x = factor(Year), y=CASE_COUNT)) +
        x = "Year",
        y = "Cases") + 
   theme(plot.title = element_text(hjust = 0.5))
-
 ```
 
 # Graphical Display of deaths and cases of COVID-19 per month
@@ -136,7 +147,6 @@ ggplot(Final2, aes(x = factor(Month), y=CASE_COUNT)) +
        x = "Month",
        y = "Cases")+ 
   theme(plot.title = element_text(hjust = 0.5))
-  
 ```
 
 # Graphical Display of deaths and cases of COVID-19 per Month and Year
@@ -194,7 +204,6 @@ ggplot(New, aes(x=factor(weekdays), y = CASE_COUNT)) +
        x = "Weekday",
        y = "Cases") +
   theme(plot.title = element_text(hjust = 0.5))
-
 ```
 
 # Graphical Display of average deaths and cases of COVID-19 per year
@@ -234,10 +243,9 @@ ggplot(Deaths_and_cases_each_month, aes(x = factor(Month), y=Avg_Deaths)) +
        x = "Month",
        y = "Cases") +
   facet_wrap(~Year) 
-
-
 ```
 
+<<<<<<< HEAD
 ## On which day has the most COVID-19 cases?
 
 ```{r}
@@ -245,3 +253,6 @@ Data1=Data[order(-Data$CASE_COUNT),]
 max(Data1$CASE_COUNT)
 Data1=Data[!duplicated(Data$date_of_interest),]
 ```
+=======
+#Results:
+>>>>>>> c3807a524584a2dc945b5277f218cedd68931a89
