@@ -22,7 +22,7 @@ COVID-19 Daily Counts of Cases
 <https://data.cityofnewyork.us/api/views/rc75-m7u3/rows.csv?accessType=DOWNLOAD>
 
 # Introduction and Research Questions:
-Covid-19 has been a global health crisis since late 2019, and this is a data set from the data.gov website. Here we would like to focus on covid-19 cases and deaths in the five regions in New York City. We will address several questions and give a conclusion of what causes the increase or decreaase in cases and deaths.
+Covid-19 has been a global health crisis since late 2019, and here we would like to focus on covid-19 cases and deaths in the five regions in New York City. We will address several questions and give a conclusion of what causes the increase in cases and deaths.
 
 -   Which of the five regions has the highest death in covid-19?
 We will analyze which of the five regions has the highest death in covid-19 and maybe give assumption or inference of why this region has the highest death.
@@ -49,9 +49,9 @@ library(tidyverse)
 ```
 # Marginal summaries And Cleaning:
 
-```{r, include=FALSE}
+```{r}
 Data <- read.csv("COVID.csv")
-
+read
 head(Data)
 dim(Data) # 1158 observations and 67 variables
 str(Data) # All integer variables with data being the only character variable 
@@ -86,7 +86,7 @@ New <- Final2 %>%
 # Total Deaths by Region
 Which of the five regions has the highest death in covid 19?
   -   BK has the highest total deaths within the time frame of when this data was taken with a death count of 12107.
-```{r, include=FALSE}
+```{r}
 # sum of death count in by region
 RegionsTotalDeaths <- Final %>% 
   summarize(SI_DEATH = sum(SI_DEATH_COUNT),
@@ -109,20 +109,12 @@ barplot(c(RegionsTotalDeaths$BK_DEATH,
         names.arg = c("BK", "QN", "BX", "MN", "SI"),
         col = "coral",
         las = 1)
-
-
-CasesTotal <- Final2 %>% group_by (Month, Year) %>% summarize(TotalCases = sum(CASE_COUNT)) %>% 
-  group_by(Year) %>% 
-  slice(which.max(TotalCases))
-                                                         
-DeathsTotal <- Final2 %>% group_by (Month, Year) %>% summarize(TotalDeaths = sum(DEATH_COUNT),.groups = 'drop')  %>% 
-  group_by(Year) %>% 
-  slice(which.max(TotalDeaths))  
 ```
+
 
 # Graphical Display of deaths and cases of COVID-19 per year
 
-```{r, include=FALSE}
+```{r}
 ggplot(Final2, aes(x = factor(Year), y=DEATH_COUNT)) +
   geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
   labs(title = "Deaths Per Year",
@@ -140,7 +132,7 @@ ggplot(Final2, aes(x = factor(Year), y=CASE_COUNT)) +
 
 # Graphical Display of deaths and cases of COVID-19 per month
   
-```{r, include=FALSE}
+```{r}
 ggplot(Final2, aes(x = factor(Month), y=DEATH_COUNT)) +
   geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
   labs(title = "Deaths Per Month",
@@ -158,7 +150,7 @@ ggplot(Final2, aes(x = factor(Month), y=CASE_COUNT)) +
 
 # Graphical Display of deaths and cases of COVID-19 per Month and Year
 
-```{r, include=FALSE}
+```{r}
 # Cases per year 
 ggplot(Final2, aes(x = factor(Month), y = DEATH_COUNT)) +
   geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
@@ -176,10 +168,22 @@ ggplot(Final2, aes(x = factor(Month), y = CASE_COUNT)) +
   facet_grid(~Year, scales = "free_x", space = "free_x") + 
   theme(plot.title = element_text(hjust = 0.5))
 ```
+## Which month in each year had the most cases in NYC? Most deaths?
+```{r}
+CasesTotal <- Final2 %>% group_by (Month, Year) %>% summarize(TotalCases = sum(CASE_COUNT)) %>% 
+  group_by(Year) %>% 
+  slice(which.max(TotalCases))
+CasesTotal   
+
+DeathsTotal <- Final2 %>% group_by (Month, Year) %>% summarize(TotalDeaths = sum(DEATH_COUNT))  %>% 
+  group_by(Year) %>% 
+  slice(which.max(TotalDeaths)) 
+DeathsTotal
+```
 
 # Graphical Display of deaths and cases of COVID-19 per day
 
-```{r, include=FALSE}
+```{r}
 ggplot(Final2, aes(x = factor(Day), y = CASE_COUNT)) +
   geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
   labs(title = "Cases per Day",
@@ -197,7 +201,7 @@ ggplot(Final2, aes(x = factor(Day), y = DEATH_COUNT)) +
 
 # Graphical Display of deaths and cases of COVID-19 per weekday
 
-```{r, include=FALSE}
+```{r}
 ggplot(New, aes(x=factor(weekdays), y = DEATH_COUNT)) +
   geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
   labs(title = "Deaths Per Day",
@@ -215,7 +219,7 @@ ggplot(New, aes(x=factor(weekdays), y = CASE_COUNT)) +
 
 # Graphical Display of average deaths and cases of COVID-19 per year
 
-```{r, include=FALSE}
+```{r}
 Final2$Year <- factor(Final2$Year, levels = c(2020, 2021, 2022, 2023))
 
 
@@ -235,7 +239,7 @@ ggplot(Final2, aes(x = factor(Year), y=mean(CASE_COUNT))) +
 
 # Graphical Display of average deaths and cases of COVID-19 per month in each year
 
-```{r, include=FALSE}
+```{r}
 Deaths_and_cases_each_month <- Final2 %>% group_by (Year,Month) %>% summarize(Avg_Deaths = mean(DEATH_COUNT),Avg_Cases = mean(CASE_COUNT), .groups = 'drop')
 
 ggplot(Deaths_and_cases_each_month, aes(x = factor(Month), y=Avg_Deaths)) +
@@ -254,7 +258,7 @@ ggplot(Deaths_and_cases_each_month, aes(x = factor(Month), y=Avg_Deaths)) +
 
 ## On which day has the most COVID-19 cases?
 
-```{r, include=FALSE}
+```{r}
 Data1=Data[order(-Data$CASE_COUNT),]
 max(Data1$CASE_COUNT)
 Data1=Data[!duplicated(Data$date_of_interest),]
