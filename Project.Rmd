@@ -42,14 +42,13 @@ We will create plots to easily compare which month and year has the highest or l
 # Description of your data set: 
 This data set counts the daily number of New York City residents who tested positive for COVID-19, were hospitalized with COVID-19, and the number of deaths among COVID-19 patients. This data set includes 67 variables and 1158 observations. These observations are recorded from 2/29/2020 to 5/1/2023. All of the variables are integer values. For the first few columns, it counts the daily number of cases and deaths in New York City, then counts the average seven days of those records. After that, it broke down into five different regions, which are Brooklyn (BK), Bronx (BX), Manhattan (MN), Queens (QU), and Staten Island (SI). Each region also counts the total cases and deaths and the average seven days of those cases.
 
-
 ```{r packages, message=FALSE}
 library(readr)
 library(tidyverse)
 ```
 # Marginal summaries And Cleaning:
 
-```{r}
+```{r, include=FALSE}
 Data <- read.csv("COVID.csv")
 head(Data)
 dim(Data) # 1158 observations and 67 variables
@@ -73,23 +72,24 @@ Final2 <- Final %>%
     Day = day(date_of_interest)
   )
 
-Final2 %>% summarise(TotalDays = n(),TotalDeaths = sum(DEATH_COUNT), TotalCases = sum(CASE_COUNT))
-
 New <- Final2 %>% 
   mutate(
     weekdays = wday(date_of_interest, label = TRUE)
   ) %>% 
   group_by(weekdays) 
 
-
-
 ```
 
 # Methods
 We mostly used the tydiverse package for our data exploration to get our results. For example, we used lubridate to change the format of the date, we also used ggplot2 to do our visualization for our research questions.
 
+# Data Exploration
+We figured out that there are 1158 total days that were considered in the data set with a total of 38,777 deaths and 2,731,350 cases. We aslo figured out that the total death rate based on the total cases for 2020 was larger followed by year 2023. 
 
-```{r}
+```{r, echo=FALSE}
+
+Final2 %>% summarise(TotalDays = n(),TotalDeaths = sum(DEATH_COUNT), TotalCases = sum(CASE_COUNT))
+
 YearlyDeathRate <- Final2 %>% 
   group_by(Year) %>%
   summarise(
@@ -110,7 +110,7 @@ MonthlyDeathRate <- Final2 %>%
 # Total Deaths by Region
 Which of the five regions has the highest death in covid 19?
   -   BK has the highest total deaths within the time frame of when this data was taken with a death count of 12107.
-```{r}
+```{r, echo=FALSE}
 # sum of death count in by region
 RegionsTotalDeaths <- Final %>% 
   summarize(SI_DEATH = sum(SI_DEATH_COUNT),
@@ -138,7 +138,7 @@ barplot(c(RegionsTotalDeaths$BK_DEATH,
 
 # Graphical Display of deaths and cases of COVID-19 per year
 
-```{r}
+```{r, echo=FALSE}
 ggplot(Final2, aes(x = factor(Year), y=DEATH_COUNT)) +
   geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
   labs(title = "Deaths Per Year",
@@ -156,7 +156,7 @@ ggplot(Final2, aes(x = factor(Year), y=CASE_COUNT)) +
 
 # Graphical Display of deaths and cases of COVID-19 per month
   
-```{r}
+```{r, echo=FALSE}
 ggplot(Final2, aes(x = factor(Month), y=DEATH_COUNT)) +
   geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
   labs(title = "Deaths Per Month",
@@ -174,7 +174,9 @@ ggplot(Final2, aes(x = factor(Month), y=CASE_COUNT)) +
 
 # Graphical Display of deaths and cases of COVID-19 per Month and Year
 
-```{r}
+We can see from the bar graph for total cases per month that there was a spike in cases during December 2021 and January 2022. The reason behind this has to do to people starting to lose fear of getting infected. They started to celebrate the holidays. Due to New York being a popular tourist attraction for the holidays, more people visited and got together to celebrate. Also, we noticed that there is a pattern in cases and deaths in which the beginning and end of each year have more cases than in between. This also has to do to people celebrating the holidays. Lastly, once again we can see that the is a spike in April 2020, which has to do with the fact that it was when COVID started to spread. We were not prepared to know how it would affect us and how we needed to get protected, which made the affects worse.
+
+```{r, echo=FALSE}
 # Cases per year 
 ggplot(Final2, aes(x = factor(Month), y = DEATH_COUNT)) +
   geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
@@ -193,7 +195,7 @@ ggplot(Final2, aes(x = factor(Month), y = CASE_COUNT)) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 ## Which month in each year had the most cases in NYC? Most deaths?
-```{r}
+```{r, echo=FALSE}
 CasesTotal <- Final2 %>% group_by (Month, Year) %>% summarize(TotalCases = sum(CASE_COUNT)) %>% 
   group_by(Year) %>% 
   slice(which.max(TotalCases))
@@ -207,7 +209,7 @@ DeathsTotal
 
 # Graphical Display of deaths and cases of COVID-19 per day
 
-```{r}
+```{r, echo=FALSE}
 ggplot(Final2, aes(x = factor(Day), y = CASE_COUNT)) +
   geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
   labs(title = "Cases per Day",
@@ -225,7 +227,7 @@ ggplot(Final2, aes(x = factor(Day), y = DEATH_COUNT)) +
 
 # Graphical Display of deaths and cases of COVID-19 per weekday
 
-```{r}
+```{r, echo=FALSE}
 ggplot(New, aes(x=factor(weekdays), y = DEATH_COUNT)) +
   geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
   labs(title = "Deaths Per Day",
@@ -243,7 +245,7 @@ ggplot(New, aes(x=factor(weekdays), y = CASE_COUNT)) +
 
 # Graphical Display of average deaths and cases of COVID-19 per year
 
-```{r}
+```{r, echo=FALSE}
 Final2$Year <- factor(Final2$Year, levels = c(2020, 2021, 2022, 2023))
 
 
@@ -263,7 +265,7 @@ ggplot(Final2, aes(x = factor(Year), y=mean(CASE_COUNT))) +
 
 # Graphical Display of average deaths and cases of COVID-19 per month in each year
 
-```{r}
+```{r, echo=FALSE}
 Deaths_and_cases_each_month <- Final2 %>% group_by (Year,Month) %>% summarize(Avg_Deaths = mean(DEATH_COUNT),Avg_Cases = mean(CASE_COUNT), .groups = 'drop')
 
 ggplot(Deaths_and_cases_each_month, aes(x = factor(Month), y=Avg_Deaths)) +
@@ -282,7 +284,7 @@ ggplot(Deaths_and_cases_each_month, aes(x = factor(Month), y=Avg_Deaths)) +
 
 ## On which day has the most COVID-19 cases?
 
-```{r}
+```{r, echo=FALSE}
 Data1=Data[order(-Data$CASE_COUNT),]
 max(Data1$CASE_COUNT)
 Data1
