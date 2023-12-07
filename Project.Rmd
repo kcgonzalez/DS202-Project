@@ -73,18 +73,40 @@ Final2 <- Final %>%
     Day = day(date_of_interest)
   )
 
-Final2 %>% summarise(TotalDeaths = sum(DEATH_COUNT), TotalCases = sum(CASE_COUNT))
+Final2 %>% summarise(TotalDays = n(),TotalDeaths = sum(DEATH_COUNT), TotalCases = sum(CASE_COUNT))
 
 New <- Final2 %>% 
   mutate(
     weekdays = wday(date_of_interest, label = TRUE)
   ) %>% 
   group_by(weekdays) 
+
+
+
 ```
 
 # Methods
 We mostly used the tydiverse package for our data exploration to get our results. For example, we used lubridate to change the format of the date, we also used ggplot2 to do our visualization for our research questions.
 
+
+```{r}
+YearlyDeathRate <- Final2 %>% 
+  group_by(Year) %>%
+  summarise(
+    TotalValue = sum(DEATH_COUNT),
+    TotalCases = sum(CASE_COUNT), 
+    Rate = TotalValue / TotalCases
+  )
+
+MonthlyDeathRate <- Final2 %>% 
+  group_by(Month) %>%
+  summarise(
+    TotalValue = sum(DEATH_COUNT),
+    TotalCases = sum(CASE_COUNT),  
+    Rate = TotalValue / TotalCases
+  )
+
+```
 # Total Deaths by Region
 Which of the five regions has the highest death in covid 19?
   -   BK has the highest total deaths within the time frame of when this data was taken with a death count of 12107.
