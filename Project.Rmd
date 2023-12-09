@@ -12,16 +12,16 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-# Team members: 
+## Team members: 
 Estephani Barroso, Kassandra Chino Gonzalez, Yu-Fang Huang
 
-# Date set: 
+## Date set: 
 COVID-19 Daily Counts of Cases
 
 # url:
 <https://data.cityofnewyork.us/api/views/rc75-m7u3/rows.csv?accessType=DOWNLOAD>
 
-# Introduction and Research Questions:
+## Introduction and Research Questions:
 Covid-19 has been a global health crisis since late 2019, and here we would like to focus on covid-19 cases and deaths in the five regions in New York City. We will address several questions and give a conclusion of what causes the increase in cases and deaths.
 
 -   Which of the five regions has the highest death in covid-19?
@@ -39,15 +39,14 @@ We will calculate the average number of deaths and cases for each year and each 
 -   Visualization of NYC COVID-19 cases and deaths breakdown by year, month, day, and weekday.
 We will create plots to easily compare which month and year has the highest or lowest cases and deaths.
 
-# Description of your data set: 
+## Description of your data set: 
 This data set counts the daily number of New York City residents who tested positive for COVID-19, were hospitalized with COVID-19, and the number of deaths among COVID-19 patients. This data set includes 67 variables and 1158 observations. These observations are recorded from 2/29/2020 to 5/1/2023. All of the variables are integer values. For the first few columns, it counts the daily number of cases and deaths in New York City, then counts the average seven days of those records. After that, it broke down into five different regions, which are Brooklyn (BK), Bronx (BX), Manhattan (MN), Queens (QU), and Staten Island (SI). Each region also counts the total cases and deaths and the average seven days of those cases.
 
 ```{r packages, message=FALSE}
 library(readr)
 library(tidyverse)
 ```
-# Marginal summaries And Cleaning:
-
+## Marginal summaries And Cleaning:
 ```{r, include=FALSE}
 Data <- read.csv("COVID.csv")
 head(Data)
@@ -55,8 +54,6 @@ dim(Data) # 1158 observations and 67 variables
 str(Data) # All integer variables with data being the only character variable 
 
 missing_values <- colSums(is.na(Data))
-missing_values #no missing values 
-
 
 Data$date_of_interest <- lubridate::mdy(Data$date_of_interest)
 
@@ -80,15 +77,18 @@ New <- Final2 %>%
 
 ```
 
-# Methods
+## Methods
 We mostly used the tydiverse package for our data exploration to get our results. For example, we used lubridate to change the format of the date, we also used ggplot2 to do our visualization for our research questions.
 
-# Data Exploration
-We figured out that there are 1158 total days that were considered in the data set with a total of 38,777 deaths and 2,731,350 cases. We aslo figured out that the total death rate based on the total cases for 2020 was larger followed by year 2023. 
+## Data Exploration
+
+#overview 
+We figured out that there are 1,158 total days that were considered in the data set with a total of 38,777 deaths and 2,731,350 cases. We also looked at the death rate based on the total cases and total deaths, which was 0.0142. Then, we figured out that the year 2020 had a death rate of 0.0506, which was the biggest when compared to the other three years. Then, we looked at the monlty death rate in which April had the largest with a rate of 0.0617.
 
 ```{r, echo=FALSE}
 
-Final2 %>% summarise(TotalDays = n(),TotalDeaths = sum(DEATH_COUNT), TotalCases = sum(CASE_COUNT))
+Final2 %>% summarise(TotalDays = n(),TotalDeaths = sum(DEATH_COUNT), TotalCases = sum(CASE_COUNT), DeathRate = TotalDeaths/TotalCases)
+
 
 YearlyDeathRate <- Final2 %>% 
   group_by(Year) %>%
@@ -97,6 +97,7 @@ YearlyDeathRate <- Final2 %>%
     TotalCases = sum(CASE_COUNT), 
     Rate = TotalValue / TotalCases
   )
+YearlyDeathRate
 
 MonthlyDeathRate <- Final2 %>% 
   group_by(Month) %>%
@@ -105,8 +106,179 @@ MonthlyDeathRate <- Final2 %>%
     TotalCases = sum(CASE_COUNT),  
     Rate = TotalValue / TotalCases
   )
+MonthlyDeathRate
 
 ```
+
+
+# Graphical Display of deaths and cases of COVID-19 per year
+We wanted to see the difference in cases and deaths between each year to see if there were any patterns. In the graphs we can see there are definitely patterns. First of all, we can see that the amount of deaths starts really high in 2020, but the amount starts to decrease each year. On the other hand, we can see how the amount of cases start to increase. The year 2023, has less data that we can look at, so we tried not to compare it a lot with the over years. As for the patterns, we think that the reason there were more cases at the beginning is due to the fact that we were all unfamiliar with the effects of COVID-19 and how we were supposed to take care. On the other hand, the reason for the increase of cases has to to the fact that the virus was spreading across all the world. 
+
+```{r, echo=FALSE}
+
+ggplot(Final2, aes(x = factor(Year), y=DEATH_COUNT)) +
+  geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
+  labs(title = "Deaths Per Year",
+       x = "Year",
+       y = "Deaths") + 
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(Final2, aes(x = factor(Year), y=CASE_COUNT)) +
+  geom_bar(stat = "identity", fill = "purple", alpha = 0.7) +
+  labs(title = "Cases Per Year",
+       x = "Year",
+       y = "Cases") + 
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+# Graphical Display of deaths and cases of COVID-19 per month
+
+We were also interested at looking at the differences between total deaths and cases in each month. One pattern we noticed was that both the amount of cases and the amount of deaths had higher amount towards the first and last months when being compared to the months in between. We also noticed that the amount of deaths in April had a really high of deaths. So, we decided that there needed to be more investigation as to why there are more cases and deaths towards the first and last months and why there are way more deaths in April.
+  
+```{r, echo=FALSE}
+ggplot(Final2, aes(x = factor(Month), y=DEATH_COUNT)) +
+  geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
+  labs(title = "Deaths Per Month",
+       x = "Month",
+       y = "Deaths")+ 
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(Final2, aes(x = factor(Month), y=CASE_COUNT)) +
+  geom_bar(stat = "identity", fill = "purple", alpha = 0.7) +
+  labs(title = "Cases Per Month",
+       x = "Month",
+       y = "Cases")+ 
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+# Graphical Display of deaths and cases of COVID-19 per Month and Year
+We looked at the differences in deaths and cases based on year and month to investigate the patterns we found on the previous graphs.  We can see from the bar graph for total cases per month that there was a spike in cases during December 2021 and January 2022. The reason behind this has to do to people starting to lose fear of getting infected. They started to celebrate the holidays. Due to New York being a popular tourist attraction for the holidays, more people visited and got together to celebrate. Also, we noticed that there is a pattern in cases and deaths in which the beginning and end of each year have more cases than in between. This also has to do to people celebrating the holidays. Lastly, we can see that there is a spike in April 2020, which has to do with the fact that it was when COVID started to spread. We were not prepared to know how it would affect us and how we needed to get protected, which made the affects worse.
+
+```{r, echo=FALSE}
+# Cases per year 
+ggplot(Final2, aes(x = factor(Month), y = DEATH_COUNT)) +
+  geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
+  labs(title = "Deaths Per Month and Year",
+       x = "Month",
+       y = "Deaths") +
+  facet_grid(~Year, scales = "free_x", space = "free_x") + 
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(Final2, aes(x = factor(Month), y = CASE_COUNT)) +
+  geom_bar(stat = "identity", fill = "purple", alpha = 0.7) +
+  labs(title = "Cases Per Month and Year",
+       x = "Month",
+       y = "Cases") +
+  facet_grid(~Year, scales = "free_x", space = "free_x") + 
+  theme(plot.title = element_text(hjust = 0.5))
+```
+## Which month in each year had the most cases in NYC? Most deaths?
+
+```{r, echo=FALSE}
+CasesTotal <- Final2 %>% group_by (Month, Year) %>% summarize(TotalCases = sum(CASE_COUNT)) %>% 
+  group_by(Year) %>% 
+  slice(which.max(TotalCases))
+CasesTotal   
+
+DeathsTotal <- Final2 %>% group_by (Month, Year) %>% summarize(TotalDeaths = sum(DEATH_COUNT))  %>% 
+  group_by(Year) %>% 
+  slice(which.max(TotalDeaths)) 
+DeathsTotal
+```
+
+# Graphical Display of deaths and cases of COVID-19 per day
+We also wanted to see if there was a pattern in the amount of cases and deaths based on the day of the month and we did noticed that there was a pattern in the of cases. There seems to be a higher amout of cases towards the first and last days. This has to do to the fact that we mentioned before, that people started to get together for the holidays, which are at the end of December and beginning January. As for the deaths, there is not a huge difference based on the day.
+
+```{r, echo=FALSE}
+ggplot(Final2, aes(x = factor(Day), y = CASE_COUNT)) +
+  geom_bar(stat = "identity", fill = "purple", alpha = 0.7) +
+  labs(title = "Cases per Day",
+       x = "Day",
+       y = "Cases") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(Final2, aes(x = factor(Day), y = DEATH_COUNT)) +
+  geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
+  labs(title = "Deaths Per Day",
+       x = "Day",
+       y = "Deaths") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+```
+
+# Graphical Display of deaths and cases of COVID-19 per weekday
+We also wanted to see if there was a pattern in cases and deaths based on the weekday. First, we looked at the amount of days for each weekday, and we noticed that each day had either 165 or 166 days, which means that we do not have to worry about the difference in data for each day. Based on the graph for deaths, we noticed that the amount there was no big difference on the weekday. As for the amount of deaths, we did notice some patters. One pattern was that during the weekend there were less cases, which has to do with many clinics being closed so less people were being tested. A second pattern was that there was more cases towards the begging of the week, which again has to do with clinics being closed. People who start feeling sick during the weekend make their appoinment to get tested as the week started. 
+
+```{r, echo=FALSE}
+
+TotalWeekdays <- New %>% 
+  group_by(weekdays) %>% 
+  summarise(Days = n())
+TotalWeekdays
+
+ggplot(New, aes(x=factor(weekdays), y = DEATH_COUNT)) +
+  geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
+  labs(title = "Deaths Per Day",
+       x = "Weekday",
+       y = "Deaths") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(New, aes(x=factor(weekdays), y = CASE_COUNT)) +
+  geom_bar(stat = "identity", fill = "purple", alpha = 0.7) +
+  labs(title = "Cases Per Day",
+       x = "Weekday",
+       y = "Cases") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+# Graphical Display of average deaths and cases of COVID-19 per year
+
+The graph shows the average cases per month. As we can see that the highest cases are during December 2021 and January 2022. They have around average of 15000 cases. 2020 has an average of less than 2500 cases because only few people got tested. In 2021 and 2022, the average is about 3000 cases except for December 2021 and January 2022. And in 2023, the average cases started to decrease because of the vaccine and the government control. For the cases per year, In 2021 and 2022, the total average cases have about 870000 cases and 2023 has the least cases because the pandemic started to be controlled and there’s only 5 months recorded in the data set.
+
+```{r, echo=FALSE}
+  
+ggplot(Final2, aes(x = factor(Year), y=mean(CASE_COUNT))) +
+  geom_bar(stat = "identity", fill = "orange", alpha = 0.7) +
+  labs(title = "Average Cases Per Year",
+       x = "Year",
+       y = "Cases")  
+
+Deaths_and_cases_each_month <- Final2 %>% group_by (Year,Month) %>% summarize(Avg_Deaths = mean(DEATH_COUNT),Avg_Cases = mean(CASE_COUNT), .groups = 'drop')
+
+ggplot(Deaths_and_cases_each_month, aes(x = factor(Month), y=Avg_Cases)) +
+  geom_bar(stat = "identity", fill = "purple", alpha = 0.8) +
+  labs(title = "Average Cases Per Month Per Year",
+       x = "Month",
+       y = "Cases") +
+  facet_wrap(~Year) 
+
+```
+
+# Graphical Display of average deaths and cases of COVID-19 per month in each year
+The graph shows the average deaths per month. As we can see that the highest death is in April 2020. It has around average of 450 deaths. This is because at initial stage people didn’t know the seriousness of covid-19 and they didn’t have any treatment methods. But started from 2021 to 2023, the average deaths started to decrease because of how people started to be aware of how scary covid-19 is and thus people started to get vaccinated. For average deaths per year, 2021 and 2022 have the highest deaths of around 12000 deaths and followed by 2020 of around 10000 to 2023 of around 3750 deaths.,
+
+```{r, echo=FALSE}
+
+Final2$Year <- factor(Final2$Year, levels = c(2020, 2021, 2022, 2023))
+
+ggplot(Final2, aes(x = factor(Year), y=mean(DEATH_COUNT))) +
+  geom_bar(stat = "identity", fill = "orange", alpha = 0.7) +
+  labs(title = "Average Deaths Per Year",
+       x = "Year",
+       y = "Deaths")    
+
+ggplot(Deaths_and_cases_each_month, aes(x = factor(Month), y=Avg_Deaths)) +
+  geom_bar(stat = "identity", fill = "purple", alpha = 0.8) +
+  labs(title = "Average Deaths per Month for Each Year",
+       x = "Month",
+       y = "Deaths") +
+  facet_wrap(~Year) 
+
+
+```
+
 # Total Deaths by Region
 Which of the five regions has the highest death in covid 19?
   -   BK has the highest total deaths within the time frame of when this data was taken with a death count of 12107.
@@ -135,159 +307,11 @@ barplot(c(RegionsTotalDeaths$BK_DEATH,
         las = 1)
 ```
 
-
-# Graphical Display of deaths and cases of COVID-19 per year
-
-```{r, echo=FALSE}
-ggplot(Final2, aes(x = factor(Year), y=DEATH_COUNT)) +
-  geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
-  labs(title = "Deaths Per Year",
-       x = "Year",
-       y = "Deaths") + 
-  theme(plot.title = element_text(hjust = 0.5))
-
-ggplot(Final2, aes(x = factor(Year), y=CASE_COUNT)) +
-  geom_bar(stat = "identity", fill = "purple", alpha = 0.7) +
-  labs(title = "Cases Per Year",
-       x = "Year",
-       y = "Cases") + 
-  theme(plot.title = element_text(hjust = 0.5))
-```
-
-# Graphical Display of deaths and cases of COVID-19 per month
-  
-```{r, echo=FALSE}
-ggplot(Final2, aes(x = factor(Month), y=DEATH_COUNT)) +
-  geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
-  labs(title = "Deaths Per Month",
-       x = "Month",
-       y = "Deaths")+ 
-  theme(plot.title = element_text(hjust = 0.5))
-
-ggplot(Final2, aes(x = factor(Month), y=CASE_COUNT)) +
-  geom_bar(stat = "identity", fill = "purple", alpha = 0.7) +
-  labs(title = "Cases Per Month",
-       x = "Month",
-       y = "Cases")+ 
-  theme(plot.title = element_text(hjust = 0.5))
-```
-
-# Graphical Display of deaths and cases of COVID-19 per Month and Year
-
-We can see from the bar graph for total cases per month that there was a spike in cases during December 2021 and January 2022. The reason behind this has to do to people starting to lose fear of getting infected. They started to celebrate the holidays. Due to New York being a popular tourist attraction for the holidays, more people visited and got together to celebrate. Also, we noticed that there is a pattern in cases and deaths in which the beginning and end of each year have more cases than in between. This also has to do to people celebrating the holidays. Lastly, once again we can see that the is a spike in April 2020, which has to do with the fact that it was when COVID started to spread. We were not prepared to know how it would affect us and how we needed to get protected, which made the affects worse.
-
-```{r, echo=FALSE}
-# Cases per year 
-ggplot(Final2, aes(x = factor(Month), y = DEATH_COUNT)) +
-  geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
-  labs(title = "Deaths Per Month and Year",
-       x = "Month",
-       y = "Deaths") +
-  facet_grid(~Year, scales = "free_x", space = "free_x") + 
-  theme(plot.title = element_text(hjust = 0.5))
-
-ggplot(Final2, aes(x = factor(Month), y = CASE_COUNT)) +
-  geom_bar(stat = "identity", fill = "purple", alpha = 0.7) +
-  labs(title = "Cases Per Month and Year",
-       x = "Month",
-       y = "Cases") +
-  facet_grid(~Year, scales = "free_x", space = "free_x") + 
-  theme(plot.title = element_text(hjust = 0.5))
-```
-## Which month in each year had the most cases in NYC? Most deaths?
-```{r, echo=FALSE}
-CasesTotal <- Final2 %>% group_by (Month, Year) %>% summarize(TotalCases = sum(CASE_COUNT)) %>% 
-  group_by(Year) %>% 
-  slice(which.max(TotalCases))
-CasesTotal   
-
-DeathsTotal <- Final2 %>% group_by (Month, Year) %>% summarize(TotalDeaths = sum(DEATH_COUNT))  %>% 
-  group_by(Year) %>% 
-  slice(which.max(TotalDeaths)) 
-DeathsTotal
-```
-
-# Graphical Display of deaths and cases of COVID-19 per day
-
-```{r, echo=FALSE}
-ggplot(Final2, aes(x = factor(Day), y = CASE_COUNT)) +
-  geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
-  labs(title = "Cases per Day",
-       x = "Day",
-       y = "Cases") +
-  theme(plot.title = element_text(hjust = 0.5))
-
-ggplot(Final2, aes(x = factor(Day), y = DEATH_COUNT)) +
-  geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
-  labs(title = "Deaths Per Day",
-       x = "Day",
-       y = "Deaths") +
-  theme(plot.title = element_text(hjust = 0.5))
-```
-
-# Graphical Display of deaths and cases of COVID-19 per weekday
-
-```{r, echo=FALSE}
-ggplot(New, aes(x=factor(weekdays), y = DEATH_COUNT)) +
-  geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
-  labs(title = "Deaths Per Day",
-       x = "Weekday",
-       y = "Deaths") +
-  theme(plot.title = element_text(hjust = 0.5))
-
-ggplot(New, aes(x=factor(weekdays), y = CASE_COUNT)) +
-  geom_bar(stat = "identity", fill = "purple", alpha = 0.7) +
-  labs(title = "Cases Per Day",
-       x = "Weekday",
-       y = "Cases") +
-  theme(plot.title = element_text(hjust = 0.5))
-```
-
-# Graphical Display of average deaths and cases of COVID-19 per year
-
-```{r, echo=FALSE}
-Final2$Year <- factor(Final2$Year, levels = c(2020, 2021, 2022, 2023))
-
-
-
-ggplot(Final2, aes(x = factor(Year), y=mean(DEATH_COUNT))) +
-  geom_bar(stat = "identity", fill = "orange", alpha = 0.7) +
-  labs(title = "Average Deaths Per Year",
-       x = "Year",
-       y = "Deaths")      
-
-ggplot(Final2, aes(x = factor(Year), y=mean(CASE_COUNT))) +
-  geom_bar(stat = "identity", fill = "orange", alpha = 0.7) +
-  labs(title = "Average Cases Per Year",
-       x = "Year",
-       y = "Cases")    
-```
-
-# Graphical Display of average deaths and cases of COVID-19 per month in each year
-
-```{r, echo=FALSE}
-Deaths_and_cases_each_month <- Final2 %>% group_by (Year,Month) %>% summarize(Avg_Deaths = mean(DEATH_COUNT),Avg_Cases = mean(CASE_COUNT), .groups = 'drop')
-
-ggplot(Deaths_and_cases_each_month, aes(x = factor(Month), y=Avg_Deaths)) +
-  geom_bar(stat = "identity", fill = "purple", alpha = 0.8) +
-  labs(title = "Average Deaths per Month for Each Year",
-       x = "Month",
-       y = "Deaths") +
-  facet_wrap(~Year) 
-                                              ggplot(Deaths_and_cases_each_month, aes(x = factor(Month), y=Avg_Cases)) +
-  geom_bar(stat = "identity", fill = "purple", alpha = 0.8) +
-  labs(title = "Average Cases Per Month for each year",
-       x = "Month",
-       y = "Cases") +
-  facet_wrap(~Year) 
-```
-
 ## On which day has the most COVID-19 cases?
 
 ```{r, echo=FALSE}
 Data1=Data[order(-Data$CASE_COUNT),]
 max(Data1$CASE_COUNT)
-Data1
 
 Data2 = Data1[Data1$CASE_COUNT>31700,]
 
