@@ -107,8 +107,9 @@ MonthlyDeathRate <- Final2 %>%
 
 ```
 # Total Deaths by Region
-Which of the five regions has the highest death in covid 19?
-  -   BK has the highest total deaths within the time frame of when this data was taken with a death count of 12107.
+Which of the five regions has the highest total death count of COVID-19?
+  -   According to the data from 2020 to 2023, Brooklyn had the highest number of deaths related to COVID-19 with a total of 12,107. Queens followed with 11,605 deaths, then the Bronx with 7,290 deaths, Manhattan with 5,311 deaths, and finally Staten Island with 2,462 deaths. The order of these regions coincides with their population, which explains the differences in their death counts. In order from largest to smallest population, the regions are: Brooklyn, Queens, Bronx, Manhattan, and Staten Island.
+  
 ```{r, echo=FALSE}
 # sum of death count in by region
 RegionsTotalDeaths <- Final %>% 
@@ -193,7 +194,15 @@ ggplot(Final2, aes(x = factor(Month), y = CASE_COUNT)) +
   facet_grid(~Year, scales = "free_x", space = "free_x") + 
   theme(plot.title = element_text(hjust = 0.5))
 ```
-## Which month in each year had the most cases in NYC? Most deaths?
+
+## Which month in each year had the most cases in NYC?
+  -   We explored data on the months with the highest number of COVID-19 cases from 2020 to 2023. In 2020, April had the most cases with a total of 109,296. This can be attributed to the early stages of the pandemic when testing sites were being established nationwide. The month with the highest number of cases in 2021 was December, with a total of 506,398. For 2022, January had 460,364 cases, and January 2023 had 57,597 cases. It's evident that the months with the most cases are either early or late in the year.
+  
+## Most deaths?
+  -   We have analyzed data on the month in each of the years 2020, 2021, 2022, and 2023, that had the highest number of deaths. In April 2020, the month with the most cases, there were 12,716 deaths. February 2021 had a total of 2,093 deaths, while January 2022 saw 3,001 deaths. Finally, January 2023 had a total of 626 deaths. It is clear from this data that the months with the highest number of deaths are in the early part of the year.
+ 
+  - As a result of COVID containment measures, vaccine development, and research, there was a significant decrease in the number of COVID cases and deaths in January 2023 compared to April 2020.
+
 ```{r, echo=FALSE}
 CasesTotal <- Final2 %>% group_by (Month, Year) %>% summarize(TotalCases = sum(CASE_COUNT)) %>% 
   group_by(Year) %>% 
@@ -282,6 +291,8 @@ ggplot(Deaths_and_cases_each_month, aes(x = factor(Month), y=Avg_Deaths)) +
 ```
 
 ## Which day has the most COVID-19 cases?
+  -   We have compiled a list of the top five days with the most COVID-19 cases. On January 3rd, 2022, there were 55,009 cases recorded, followed by 51,275 cases on December 27th, 2021. December 29th, 2021 saw 50,530 recorded cases, while December 28th, 2021 had 49,719 cases. Finally, on January 4th, 2022, 49,237 cases were recorded for NYC. 
+
 
 ```{r, echo=FALSE}
 Data1=Data[order(-Data$CASE_COUNT),]
