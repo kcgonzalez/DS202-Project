@@ -11,7 +11,6 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
 # Team members: 
 Estephani Barroso, Kassandra Chino Gonzalez, Yu-Fang Huang
 
@@ -258,7 +257,7 @@ ggplot(Deaths_and_cases_each_month, aes(x = factor(Month), y=Avg_Deaths)) +
   facet_wrap(~Year) 
 ```
 
-## On which day has the most COVID-19 cases?
+## Which day has the most COVID-19 cases?
 
 ```{r}
 Data1=Data[order(-Data$CASE_COUNT),]
@@ -276,5 +275,5 @@ ggplot(Data2, aes(reorder(date_of_interest, -CASE_COUNT), CASE_COUNT)) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-#Conclusion:
+# Conclusion:
 From the graphs we can see that normally there are more cases towards the beginning and end of the year, which might be cased by several factors such as national holidays or family reunion. Overall we noticed that the amount of total deaths started to decrease over time, which might be due to people being more careful such as quarantine and getting the shot. As for total cases, they started to increase, which might be due to more and more people getting tested.
