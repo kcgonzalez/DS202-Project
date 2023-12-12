@@ -86,8 +86,8 @@ We mostly used the tydiverse package for our data exploration to get our results
 
 ## Data Exploration
 
-#overview 
-We figured out that there are 1,158 total days that were considered in the data set with a total of 38,777 deaths and 2,731,350 cases. We also looked at the death rate based on the total cases and total deaths, which was 0.0142. Then, we figured out that the year 2020 had a death rate of 0.0506, which was the biggest when compared to the other three years. Then, we looked at the monlty death rate in which April had the largest with a rate of 0.0617.
+# Overview 
+We figured out that there are 1,158 total days that were considered in the data set with a total of 38,777 deaths and 2,731,350 cases. We also looked at the death rate based on the total cases and total deaths, which was 0.0142. Then, we figured out that the year 2020 had a death rate of 0.0506, which was the biggest when compared to the other three years. We also compare the death rate in the first half year in each year with the total year and found out that all of the years have an little increase in death rate. 2020 still have the biggest death rate even when looking at the first half year. Then, we looked at the monthly death rate in which April had the largest with a rate of 0.0617. 
 
 ```{r, echo=FALSE}
 
@@ -103,6 +103,13 @@ YearlyDeathRate <- Final2 %>%
   )
 YearlyDeathRate
 
+first_half_year_death_rate <- Final2 %>% 
+  group_by(Year) %>% 
+  filter(Month %in% c("Jan", "Feb", "Mar", "Apr", "May", "Jun")) %>% 
+  summarise(
+  death_rate = sum(DEATH_COUNT)/sum(CASE_COUNT),.groups = 'drop'
+  )
+
 MonthlyDeathRate <- Final2 %>% 
   group_by(Month) %>%
   summarise(
@@ -113,7 +120,7 @@ MonthlyDeathRate <- Final2 %>%
 MonthlyDeathRate
 
 ```
-<<<<<<< HEAD
+
 # Total Deaths by Region
 Which of the five regions has the highest total death count of COVID-19?
   -   According to the data from 2020 to 2023, Brooklyn had the highest number of deaths related to COVID-19 with a total of 12,107. Queens followed with 11,605 deaths, then the Bronx with 7,290 deaths, Manhattan with 5,311 deaths, and finally Staten Island with 2,462 deaths. The order of these regions coincides with their population, which explains the differences in their death counts. In order from largest to smallest population, the regions are: Brooklyn, Queens, Bronx, Manhattan, and Staten Island.
